@@ -22,11 +22,12 @@ const Coin = styled.li`
   background-color: #fff;
   color: ${props => props.theme.bgColor};
   margin-bottom: 10px;
-  padding: 20px;
   border-radius: 15px;
   a {
     transition: color .2s ease-in;
-    display: block;
+    padding: 20px;
+    display: flex;
+    align-items: center;
   }
   &:hover {
     a {
@@ -43,6 +44,12 @@ const Title = styled.h1`
 const Loader = styled.div`
   text-align: center;
   display: block;
+`;
+
+const CoinImg = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
 `;
 
 interface CoinInterface { // typescript에게 어떤 형식을 api로 부터 가져오는지 설명해줌
@@ -81,7 +88,10 @@ function Coins() {
       {loading ? <Loader>Loading...</Loader> :
         <CoinsList>
           {coins.map(coin => <Coin key={coin.id}>
-            <Link to={`/${coin.id}`}>
+            <Link to={`/${coin.id}`} state={coin}>
+              {/* <Link>에 state를 추가 하여 coin에 관한 정보를 넘긴다 */}
+
+              <CoinImg src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} alt={coin.name} />
               {coin.name} &rarr;
             </Link>
           </Coin>)}

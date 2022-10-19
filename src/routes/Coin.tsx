@@ -1,6 +1,6 @@
 // 코인아이디를 클릭하면 그 코인에 관한정보 보이기
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom"; // 주소의 coinId를 가져온다 (localhost:3000/아이디)
 import styled from "styled-components";
 
@@ -47,11 +47,29 @@ function Coin() {
 
   // console.log(name);
 
+  const [info, setInfo] = useState({}); // api로 불러오는 코인정보를 담기위해
+  const [priceInfo, setPriceInfo] = useState({}); // api로 불러오는 코인가격을 담기위해
+
+  useEffect(()=>{
+    (async ()=> {
+      const infoData = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json(); // 코인정보 불러오기
+      console.log(infoData);
+
+      const priceData = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json(); // 코인가격 불러오기
+      console.log(priceData);
+
+      setInfo(infoData);
+      setPriceInfo(priceData);
+    })();
+  },[]);
+
   return (
     <Container>
       <Header>
         <Title>{state?.name || 'Loading'}</Title>
         {/* state가 존재하면 name을 가져오고 아니면 loading */}
+        {/* ?.는 옵셔널 체이닝 이라고 한다, state가 존재하지 않으면 원래는 타입에러가 나오지만 언디파인드라고 뜨게함 */}
+        {/* ?.은 ?.'앞’의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환합니다. */}
       </Header>
       {loading ? <Loader>Loading...</Loader> : null}
     </Container>

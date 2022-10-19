@@ -87,7 +87,8 @@ function Coins() {
       </Header>
       {loading ? <Loader>Loading...</Loader> :
         <CoinsList>
-          {coins.map(coin => <Coin key={coin.id}>
+          {coins.map(coin => 
+          <Coin key={coin.id}>
             <Link to={`/${coin.id}`} state={coin}>
               {/* <Link>에 state를 추가 하여 coin에 관한 정보를 넘긴다 */}
 
